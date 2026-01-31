@@ -13,38 +13,38 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
-    private ClienteRepository repository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
-    public ClienteService(ClienteRepository repository) {
-        this.repository = repository;
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
     }
 
     public List<Cliente> listarClientes() {
-        return repository.findAll();
+        return clienteRepository.findAll();
     }
 
     public Optional<Cliente> buscarCliente(Integer id) {
-        return repository.findById(id);
+        return clienteRepository.findById(id);
     }
 
     public Cliente cadastrarCliente(Cliente cliente) {
-        return repository.save(cliente);
+        return clienteRepository.save(cliente);
     }
 
     public Optional<Cliente> atualizarCliente(Integer id, Cliente dados) {
-        return repository.findById(id).map( cliente -> {
+        return clienteRepository.findById(id).map( cliente -> {
             cliente.setNome(dados.getNome());
             cliente.setTelefone(dados.getTelefone());
             cliente.setEndereco(dados.getEndereco());
 
-            return repository.save(cliente);
+            return clienteRepository.save(cliente);
         });
     }
 
     public boolean deletarCliente(Integer id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
+        if (clienteRepository.existsById(id)) {
+            clienteRepository.deleteById(id);
             return true;
         }
         return false;
