@@ -13,16 +13,16 @@ public class Cliente {
     private String nome;
 
     @Column
-    private String cpf;
+    private String telefone;
 
     @Column
     private String endereco;
 
     public Cliente() { }
 
-    public Cliente(String nome, String cpf, String endereco) {
+    public Cliente(String nome, String telefone, String endereco) {
         this.nome = nome;
-        this.cpf = cpf;
+        this.telefone = telefone;
         this.endereco = endereco;
     }
 
@@ -42,12 +42,12 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getEndereco() {

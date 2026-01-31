@@ -1,51 +1,49 @@
 package com.rekor.pedidos.controller;
 
 import com.rekor.pedidos.model.Cliente;
-import com.rekor.pedidos.repository.ClienteRepository;
+import com.rekor.pedidos.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("clientes")
 public class ClienteController {
-    private ClienteRepository repository;
+    private ClienteService service;
 
     @Autowired
-    public ClienteController(ClienteRepository repository) {
-        this.repository = repository;
+    public ClienteController(ClienteService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public List<Cliente> listarClientes() {
-        return repository.findAll();
+    public ResponseEntity<List<Cliente>> listarClientes() {
+        List<Cliente> clientes = service.listarClientes();
+        return ResponseEntity.ok(clientes);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Cliente> buscarCliente(@PathVariable Integer id) {
+        return service.buscarCliente(id);
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
-        Cliente salvo = repository.save(cliente);
+    public ResponseEntity<Cliente> cadastraCliente(@RequestBody Cliente cliente) {
+        Cliente salvo = service.cadastrarCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente dados) {
-        return repository.findById(id).map( cliente -> {
-            cliente.setNome(dados.getNome());
-            cliente.setCpf(dados.getCpf());
-            cliente.setEndereco(dados.getEndereco());
-
-            Cliente atualizado = repository.save(cliente);
-            return ResponseEntity.ok(atualizado);
-        }).orElse(ResponseEntity.notFound().build());
+    public Optional<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente dados) {
+        return service.atualizarCliente(id, dados);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarCliente(@PathVariable Integer id) {
-        return repository.findById(id).map( cliente -> {
-            repository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.notFound().build());
+    public boolean deleteCliente(@PathVariable Integer id) {
+        return service.deletarCliente(id);
     }
 }
