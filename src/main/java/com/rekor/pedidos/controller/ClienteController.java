@@ -20,18 +20,18 @@ public class ClienteController {
     }
 
     @GetMapping
-    private List<Cliente> listarClientes() {
+    public List<Cliente> listarClientes() {
         return repository.findAll();
     }
 
     @PostMapping
-    private ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
         Cliente salvo = repository.save(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente dados) {
+    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Integer id, @RequestBody Cliente dados) {
         return repository.findById(id).map( cliente -> {
             cliente.setNome(dados.getNome());
             cliente.setCpf(dados.getCpf());
@@ -41,7 +41,6 @@ public class ClienteController {
             return ResponseEntity.ok(atualizado);
         }).orElse(ResponseEntity.notFound().build());
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletarCliente(@PathVariable Integer id) {
         return repository.findById(id).map( cliente -> {
